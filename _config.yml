@@ -58,7 +58,7 @@ plugins:
 
 author:
   name   : "Jiwon"
-  avatar : "/assets/images/photo.jpg"
+  avatar : "/assets/images/pfp_photo.jpg"
   bio    : "CGVI Graduate from UCL"
   links:
     - label: "GitHub"
