@@ -25,10 +25,6 @@ search: true
 
 # Build settings
 markdown: kramdown
-highlighter: rouge
-lsi: false
-excerpt_separator: "\n\n"
-incremental: false
 
 remote_theme: mmistakes/minimal-mistakes
 # Outputting
@@ -39,6 +35,7 @@ timezone: Asia/Seoul # https://en.wikipedia.org/wiki/List_of_tz_database_time_zo
 
 include:
   - _pages
+  - _includes
 
 # Exclude from processing.
 # The following items will not be processed, by default. Create a custom list
