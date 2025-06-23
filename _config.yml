@@ -27,7 +27,6 @@ search: true
 markdown: kramdown
 
 remote_theme: mmistakes/minimal-mistakes
-
 # Outputting
 permalink: /:categories/:title/
 paginate: 5 # amount of posts to show
@@ -98,8 +97,6 @@ defaults:
       comments: true
       share: true
       related: true
-      head: |
-        {% include head-custom.html %}
   # _pages
   - scope:
       path: "_pages"
