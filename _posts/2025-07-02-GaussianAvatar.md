@@ -68,39 +68,83 @@ To achieve photorealism, each Gaussian stores a **view-dependent color appearanc
 
 ### 3. **Training Pipeline**
 
-GaussianAvatars extend the static 3D Gaussian Splatting (3DGS) method to handle **dynamic, expression-driven facial motion** by introducing a **rigged deformation model** and adapting the optimization pipeline accordingly.
-
-#### 🔄 Extension over 3DGS
-
-Unlike 3DGS, which optimizes a static set of Gaussians $$ \mathcal{G}_j $$, GaussianAvatars define **rigged Gaussians** that deform according to **blendshape-based facial rigs**. Each Gaussian is linked to blendshape bones through skinning weights and is updated based on current expression parameters $$ \mathbf{w} \in \mathbb{R}^K $$.
-
-The updated position of each Gaussian becomes:
-
-$$
-\mathbf{x}_j(\mathbf{w}) = \sum_{k=1}^{K} w_k \cdot \Delta \mathbf{x}_{j}^{(k)} + \mathbf{x}_j^0
-$$
-
-Where:
-- $$ \mathbf{x}_j^0 $$: rest position of Gaussian j
-- $$ \Delta \mathbf{x}_j^{(k)} $$: displacement under blendshape component k
-
-The output color and opacity are also view-dependent:
-
-$$
-F_j(x_j(\mathbf{w}), v) \rightarrow (r_j, g_j, b_j, \alpha_j)
-$$
+GaussianAvatars build on 3D Gaussian Splatting (3DGS) by integrating a **FLAME-based rig**, allowing expressions and poses to animate Gaussians through mesh-driven deformation. However, this introduces new optimization challenges, such as misalignment artifacts and scaling instability, especially under animation. To solve this, the authors propose a **custom loss function** with new geometric regularizers and a perceptual similarity term.
 
 ---
 
-#### 🎯 Training Objective (Extended 3DGS Loss)
+#### 📦 Overall Loss Function
 
-GaussianAvatars retain the photometric supervision of 3DGS but augment it for dynamic expressions. The total loss is:
+The full loss used during training is:
 
 $$
-\mathcal{L}_{\text{total}} = \mathcal{L}_{\text{photo}} + \lambda_{\text{expr}} \| \mathbf{w} \|_2^2 + \lambda_{\text{sparse}} \sum_j \alpha_j^2
+\mathcal{L} = \mathcal{L}_{\text{rgb}} + \lambda_{\text{position}} \mathcal{L}_{\text{position}} + \lambda_{\text{scaling}} \mathcal{L}_{\text{scaling}}
 $$
 
-This enables the system to learn how each Gaussian should deform and appear under various expressions and views.
+Where:
+- $$ \mathcal{L}_{\text{rgb}} $$ is the image reconstruction loss
+- $$ \mathcal{L}_{\text{position}} $$ constrains Gaussians to stay near their mesh triangle
+- $$ \mathcal{L}_{\text{scaling}} $$ prevents overly large Gaussians from causing animation instability
+
+---
+
+#### 🎨 RGB Reconstruction Loss
+
+The RGB loss blends pixel-wise L1 and a structural dissimilarity (D-SSIM) term:
+
+$$
+\mathcal{L}_{\text{rgb}} = (1 - \lambda) \cdot \mathcal{L}_{1} + \lambda \cdot \mathcal{L}_{\text{D-SSIM}}
+$$
+
+Where $$ \lambda = 0.2 $$. This combination captures both pixel-level accuracy and perceptual structure, providing better rendering quality without additional silhouette or depth supervision.
+
+---
+
+#### 📍 Position Loss
+
+To ensure Gaussians remain near their parent triangle in the FLAME mesh, the position loss applies a soft constraint:
+
+$$
+\mathcal{L}_{\text{position}} = \| \max(\mu, \epsilon_{\text{position}}) \|_2
+$$
+
+Where:
+- $$ \mu $$ is the offset vector between a Gaussian and its corresponding triangle center
+- $$ \epsilon_{\text{position}} = 1 $$ defines a threshold under which errors are ignored
+
+This avoids wild spatial drift when Gaussians are animated.
+
+---
+
+#### 📏 Scaling Loss
+
+Large Gaussians can introduce visual jitter when their associated triangles rotate slightly. To address this, a scale-based penalty is added:
+
+$$
+\mathcal{L}_{\text{scaling}} = \| \max(s, \epsilon_{\text{scaling}}) \|_2
+$$
+
+Where:
+- $$ s $$ is the Gaussian’s scale relative to the triangle scale
+- $$ \epsilon_{\text{scaling}} = 0.6 $$ disables the penalty when Gaussians are reasonably small
+
+This prevents excessive jitter and improves runtime performance by limiting the number of splats intersected by a ray.
+
+---
+
+#### 🛠 Optimization Details
+
+- Optimizer: **Adam**
+- Learning rate:
+  - 5e-3 for position
+  - 1.7e-2 for scale
+  - Fine-tuned FLAME params (translation, pose, expression) at 1e-6 to 1e-3
+- Gaussians' opacity is reset every 60k iterations to improve convergence
+- Training runs for 600k iterations with exponential learning rate decay
+- **Adaptive density control** with binding inheritance is enabled from 10k to 600k iterations (every 2k steps)
+
+---
+
+These new regularization terms and adaptive training behaviors are crucial to maintaining **structural consistency** and **animation stability** while still benefiting from the efficient rasterization pipeline of 3DGS.
 
 ---
 
