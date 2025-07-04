@@ -199,7 +199,6 @@ $$
 - Produces **photorealistic facial renderings** with **subtle expression dynamics**
 - Can generalize across expressions not seen during training
 
-![Results from the paper](https://arxiv.org/abs/2312.02069)
 
 ---
 
