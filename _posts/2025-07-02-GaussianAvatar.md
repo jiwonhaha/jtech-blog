@@ -72,7 +72,7 @@ GaussianAvatars extend the static 3D Gaussian Splatting (3DGS) method to handle 
 
 #### 🔄 Extension over 3DGS
 
-Unlike 3DGS, which optimizes a static set of Gaussians \( \{ \mathcal{G}_j \} \), GaussianAvatars define **rigged Gaussians** that deform according to **blendshape-based facial rigs**. Each Gaussian is linked to blendshape bones through skinning weights and is updated based on current expression parameters \( \mathbf{w} \in \mathbb{R}^K \).
+Unlike 3DGS, which optimizes a static set of Gaussians $$ \mathcal{G}_j $$, GaussianAvatars define **rigged Gaussians** that deform according to **blendshape-based facial rigs**. Each Gaussian is linked to blendshape bones through skinning weights and is updated based on current expression parameters $$ \mathbf{w} \in \mathbb{R}^K $$.
 
 The updated position of each Gaussian becomes:
 
@@ -81,8 +81,8 @@ $$
 $$
 
 Where:
-- $$\( \mathbf{x}_j^0 \)$$: rest position of Gaussian j
-- $$\( \Delta \mathbf{x}_j^{(k)} \)$$: displacement under blendshape component k
+- $$ \mathbf{x}_j^0 $$: rest position of Gaussian j
+- $$ \Delta \mathbf{x}_j^{(k)} $$: displacement under blendshape component k
 
 The output color and opacity are also view-dependent:
 
