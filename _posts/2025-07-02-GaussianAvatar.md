@@ -50,21 +50,82 @@ GaussianAvatars address these limitations by introducing:
 
 ### 1. **Rigged 3D Gaussian Representation**
 
-Each **head avatar** is modeled as a collection of **anisotropic 3D Gaussians**:
-- Each Gaussian has a **mean position**, **scale**, **rotation (via quaternion)**, **opacity**, and **view-dependent color**.
-- Gaussians are **attached to a blendshape rig**, which allows dynamic expression modeling using blendshape weights.
-  
-This enables **pose-dependent deformation** of Gaussians, allowing the model to simulate muscle movements and facial expressions.
+GaussianAvatars extend 3D Gaussian Splatting by **rigging each Gaussian to a triangle** in the FLAME mesh. Unlike NeRFs or earlier splatting methods where Gaussians are fixed in world space, here each Gaussian lives in the **local coordinate system** of a triangle and moves as the triangle deforms over time (due to pose or expression changes).
+
+#### 🧱 Local Frame Construction
+
+Each triangle defines a **local coordinate system**:
+- Let the triangle vertices be $$ \{v_1, v_2, v_3\} $$
+- The local origin  T  is the **mean** of the vertices.
+- Construct a rotation matrix $$ R \in \mathbb{R}^{3 \times 3} $$ from:
+  - Edge direction $$ e = v_2 - v_1 $$
+  - Normal $$ n = (v_2 - v_1) \times (v_3 - v_1) $$
+  - Cross product of the two: $$ e \times n $$
+
+- The **triangle scale** $$ k $$ is computed from the average edge length and its perpendicular, capturing the local size.
+
+#### 🧩 Gaussian Parameters in Local Space
+
+Each Gaussian is defined in triangle-local space with:
+- Local position $$ \mu $$
+- Local rotation  r 
+- Local scale  s 
+
+At **render time**, these are converted to global space:
+
+$$
+r' = R \cdot r \\
+\mu' = k \cdot R \cdot \mu + T \\
+s' = k \cdot s
+$$
+
+This formulation ensures that Gaussians deform smoothly and naturally as the triangle moves due to FLAME-driven articulation.
+
+It also has optimization benefits: since the parameters are **relative to local triangle scale**, Gaussians on small triangles move less per step than those on large ones, enabling **consistent learning rates** across varying mesh regions.
 
 ---
 
 ### 2. **View-Dependent Appearance Modeling**
 
-To achieve photorealism, each Gaussian stores a **view-dependent color appearance** using **learned basis functions**, similar to **spherical harmonics (SH)** or neural MLPs:
-- Appearance varies smoothly with camera viewpoint
-- Lighting and specular effects are preserved
+Each Gaussian defines an appearance function:
+
+$$
+F(x, v) \rightarrow (r, g, b, \alpha)
+$$
+
+Where:
+-  x : 3D Gaussian center in world space
+-  v : camera/viewing direction
+-  (r, g, b) : RGB appearance
+- $$ \alpha $$: opacity
+
+This function is parameterized using **low-dimensional view-dependent appearance bases**, e.g., spherical harmonics (SH) or learned MLP embeddings. It enables:
+- **View-consistent shading**
+- **Specular highlights**
+- **Smooth blending** during splatting
 
 ---
+
+### 🧬 Binding Inheritance (Adaptive Density Control)
+
+The initial rig attaches **one Gaussian per triangle**, but this is insufficient to represent fine details like hair strands or creases. GaussianAvatars adopt **adaptive density control** from [3DGS], enhanced by a novel **binding inheritance** strategy:
+
+- Gaussians are **split or cloned** based on:
+  - High view-space positional gradient
+  - Opacity threshold
+- New Gaussians are added **in the local space** of their parent triangle.
+- Each Gaussian stores the **index of its parent triangle** to support:
+  - **Inherited rig binding** when new Gaussians are added
+  - **Consistency in motion during animation**
+
+To prevent degeneration:
+- A **pruning step** resets or deletes low-opacity Gaussians
+- To protect **occluded regions** (like teeth or eyeballs), a constraint ensures **each triangle always has at least one Gaussian attached**
+
+This results in a **dynamic, detail-preserving, and animation-consistent** Gaussian representation.
+
+---
+
 
 ### 3. **Training Pipeline**
 
