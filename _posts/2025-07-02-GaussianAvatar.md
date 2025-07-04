@@ -244,10 +244,10 @@ $$
 
 ## Key Contributions
 
-- **Dynamic Gaussian Avatar Model**: First method to rig 3D Gaussians for animatable facial avatars.
-- **Blendshape Rig Integration**: Enables realistic expression and motion modeling via parametric blendshape control.
-- **Real-Time Rendering**: Achieves interactive speeds using GPU rasterization.
-- **Photorealistic Output**: High fidelity results comparable or superior to NeRF-based methods but with significantly faster inference.
+- **Triangle-Rigged 3D Gaussian Avatar Representation**: The first method to rig 3D Gaussians to a parametric mesh (FLAME) using triangle-local coordinate systems, enabling stable and expressive head avatar animation.
+
+- **Binding Inheritance for Adaptive Density Control**: A novel mechanism that ensures newly added Gaussians (via densification) inherit the rigging of their parent triangle, preserving local controllability and structural coherence across animation.
+
 
 ---
 
