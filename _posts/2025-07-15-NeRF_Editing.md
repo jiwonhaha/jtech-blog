@@ -52,7 +52,7 @@ Where:
 
 For a full technical review of NeRF, refer to my earlier post:
 
-👉 [NeRF: Representing Scenes as Neural Radiance Fields for View Synthesis]({{ site.baseurl }}/blog/2025/06/20/nerf-paper-review)
+👉 [NeRF: Representing Scenes as Neural Radiance Fields for View Synthesis]({{ site.baseurl }}https://jiwonhaha.github.io/jtech-blog/paper%20review/NeRF/)
 
 ## Key Idea of NeRF-Editing
 
@@ -146,6 +146,7 @@ The Closest Point method transfers mesh deformation by assigning to each sampled
 The 3NN (Three Nearest Neighbors) baseline improves on this by interpolating displacements from the three closest mesh vertices, weighted by inverse distance. However, it still suffers from discontinuities.
 
 Their method uses a tetrahedral mesh to propagate deformations via barycentric interpolation in 3D space, resulting in smoother, more accurate, and view-consistent edits without retraining the NeRF.
+
 ---
 
 ## Limitations
