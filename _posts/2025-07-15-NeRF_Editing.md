@@ -123,7 +123,7 @@ This effectively "bends" rays through the deformed geometry.
 
 ## Results
 
-![N-edit_result]({{ site.baseurl }}/assets/NeRF_Editing/explain.png)
+![N-edit_result]({{ site.baseurl }}/assets/NeRF_Editing/result.png)
 
 ### Datasets
 - **Synthetic**: Mixamo, Lego, Chair (NeRF dataset)
