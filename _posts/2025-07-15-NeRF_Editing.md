@@ -52,7 +52,7 @@ Where:
 
 For a full technical review of NeRF, refer to my earlier post:
 
-👉 [NeRF: Representing Scenes as Neural Radiance Fields for View Synthesis]({{ site.baseurl }}https://jiwonhaha.github.io/jtech-blog/paper%20review/NeRF/)
+👉 [NeRF: Representing Scenes as Neural Radiance Fields for View Synthesis](https://jiwonhaha.github.io/jtech-blog/paper%20review/NeRF/)
 
 ## Key Idea of NeRF-Editing
 
