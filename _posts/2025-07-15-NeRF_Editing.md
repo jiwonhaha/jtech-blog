@@ -1,5 +1,5 @@
 ---
-title: "NeRF-Editing: Geometry Editing of Neural Radiance Fields"
+title: "[Paper Review] NeRF-Editing: Geometry Editing of Neural Radiance Fields"
 date: 2025-07-15
 categories:
   - paper review

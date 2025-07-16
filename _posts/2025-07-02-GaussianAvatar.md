@@ -1,5 +1,5 @@
 ---
-title: "GaussianAvatars: Photorealistic Head Avatars with Rigged 3D Gaussians"
+title: "[Paper Review] GaussianAvatars: Photorealistic Head Avatars with Rigged 3D Gaussians"
 date: 2025-07-02
 categories:
   - paper review
