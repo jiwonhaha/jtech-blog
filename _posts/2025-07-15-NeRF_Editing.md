@@ -108,7 +108,7 @@ Where:
 
 - During rendering, for each ray sample point:
   1. Find the corresponding tetrahedron
-  2. Use barycentric interpolation to compute displacement \(\Delta p\)
+  2. Use barycentric interpolation to compute displacement $$\Delta p$$
   3. Apply displacement to query NeRF:
 
 $$
