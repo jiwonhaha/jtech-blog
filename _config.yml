@@ -23,6 +23,13 @@ github_username: jiwonhaha
 minimal_mistakes_skin: default
 search: true
 
+# 💡 GOOGLE ANALYTICS BLOCK
+analytics:
+  provider: "google-gtag"
+  google:
+    tracking_id: "G-T4V2HKVLKB"
+    anonymize_ip: true # Recommended for privacy compliance
+
 # Build settings
 markdown: kramdown
 
