@@ -49,7 +49,7 @@ GaussCraft addresses these by introducing a **2D Gaussian-to-mesh rigging** fram
 
 ### 1. **2D Gaussian Rigging**
 
-GaussCraft establishes a link between a reconstructed triangular mesh and 2D Gaussian splats. Each Gaussian is treated as if it lives in the **tangent plane** of a specific mesh face.
+GaussCraft bridges the gap between a reconstructed triangular mesh and 2D Gaussian splats. By treating each Gaussian as if it lives on the tangent plane of a specific mesh face, the framework effectively synthesizes the core concepts of Gaussian Avatar and 2D Gaussian Splatting. This design choice addresses a key limitation of 3DGS: while volumetric 3D Gaussians struggle to articulate cleanly along mesh surfaces, 2D Gaussians are inherently suited for surface-driven movement, ensuring structural coherence during editing.
 
 #### 🧱 Local Frame Construction
 
