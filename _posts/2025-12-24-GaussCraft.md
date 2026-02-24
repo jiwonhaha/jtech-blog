@@ -51,14 +51,14 @@ GaussCraft addresses these by introducing a **2D Gaussian-to-mesh rigging** fram
 
 GaussCraft bridges the gap between a reconstructed triangular mesh and 2D Gaussian splats. By treating each Gaussian as if it lives on the tangent plane of a specific mesh face, the framework effectively synthesizes the core concepts of Gaussian Avatar and 2D Gaussian Splatting. This design choice addresses a key limitation of 3DGS: while volumetric 3D Gaussians struggle to articulate cleanly along mesh surfaces, 2D Gaussians are inherently suited for surface-driven movement, ensuring structural coherence during editing.
 
-#### 🧱 Local Frame Construction
+#### Local Frame Construction
 
 For each triangular face with vertices $$\{v_1, v_2, v_3\}$$:
 - The local origin **T** is the mean of the vertices.
 - A rotation matrix $$R \in \mathbb{R}^{3 \times 3}$$ is constructed using the edge direction, the face normal, and their cross product.
 - The scale factor **k** is derived from the mean edge length and its perpendicular, ensuring the Gaussian remains relative to the triangle's physical size.
 
-#### 🧩 Gaussian Parameters in Local Space
+#### Gaussian Parameters in Local Space
 
 GaussCraft simplifies the transformation by removing the z-axis from local space. Each Gaussian is defined by:
 - Local 2D position $$\mu$$
@@ -81,7 +81,7 @@ By restricting the rotation and position to the local tangent plane, we signific
 
 Optimization involves balancing photometric accuracy with geometric constraints to ensure Gaussians do not drift away from the mesh during user editing.
 
-#### 📦 Overall Loss Function
+#### Overall Loss Function
 
 The full optimization loss is:
 
@@ -98,7 +98,7 @@ Where:
 
 ---
 
-### 🧬 Binding Inheritance (Adaptive Density Control)
+### Binding Inheritance (Adaptive Density Control)
 
 To represent fine details like hair or textures, we use **adaptive density control** with a custom strategy:
 
