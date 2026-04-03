@@ -101,6 +101,7 @@ defaults:
       layout: single
       author_profile: true
       read_time: true
+      show_date: true  # 
       comments: true
       share: true
       related: true
@@ -118,5 +119,3 @@ category_archive:
 tag_archive:
   type: liquid
   path: /tags/
-
-
