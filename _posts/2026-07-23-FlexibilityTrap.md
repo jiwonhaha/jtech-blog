@@ -35,6 +35,7 @@ Diffusion Language Models (dLLMs) are usually sold on one headline feature: unli
 ---
 
 ## Background: Autoregressive vs. Diffusion Language Models
+![JustGRPO]({{ site.baseurl }}/assets/FlexibilityTrap/FlexibilityTrap_bg.png)
 
 To understand why "order" is even a design choice, we need to contrast the two paradigms for generating text.
 
@@ -93,7 +94,7 @@ By the time the model finally fills those pivotal tokens, the surrounding contex
 
 If arbitrary order sabotages exploration during learning, the remedy is to simply **not use it during training**. That is the whole idea behind **JustGRPO** ("just GRPO", no diffusion-specific machinery).
 
-![JustGRPO]({{ site.baseurl }}/assets/FlexibilityTrap/FlexibilityTrap_method.png)
+
 
 ### 1. AR Trajectory as a Training Scaffold
 During RL exploration, JustGRPO constrains the model to a standard left-to-right trajectory by masking all future tokens:
