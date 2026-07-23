@@ -35,7 +35,6 @@ Diffusion Language Models (dLLMs) are usually sold on one headline feature: unli
 ---
 
 ## Background: Autoregressive vs. Diffusion Language Models
-![JustGRPO]({{ site.baseurl }}/assets/FlexibilityTrap/FlexibilityTrap_bg.png)
 
 To understand why "order" is even a design choice, we need to contrast the two paradigms for generating text.
 
@@ -81,6 +80,9 @@ The key measurement tool is **Pass@k**, which probes the upper bound of reasonin
 Worse, the two solution sets are not merely different, they are **nested**. On HumanEval, AR order solves **21.3%** of problems that arbitrary order never gets, while arbitrary order solves only **0.6%** that AR order misses. Arbitrary-order solutions are essentially a strict subset of AR-order ones. Flexibility does not expand the reachable solution space, it shrinks it.
 
 ### 2. The Mechanism: Entropy Degradation
+
+![AR confronts vs Arbitrary bypasses uncertainty]({{ site.baseurl }}/assets/FlexibilityTrap/FlexibilityTrap_bg.png)
+
 Why does this happen? The authors trace it to **how each regime confronts uncertainty**:
 
 * **AR order** must resolve the next token in sequence, so it is forced to confront high-uncertainty positions and keep multiple reasoning branches alive.
